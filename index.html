@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uyga Vazifa: Todo | Zamonaviy Vazifalar Boshqaruvi</title>
+  <meta name="description" content="Zamonaviy, qulay va chiroyli dizayndagi Todo - Uyga vazifalar ilovasi. Vazifalarni qidirish, filtrlash va boshqarish.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Orqa fon nurlari / ambient background glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <main class="app-wrapper">
+    <div class="todo-card" id="todoApp">
+      <!-- Card Header -->
+      <header class="card-header">
+        <div class="header-top">
+          <div class="title-badge">
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+            <span>Kunlik Reja</span>
+          </div>
+
+          <div class="header-actions">
+            <!-- Theme Toggle -->
+            <button id="themeToggleBtn" class="theme-btn" title="Mavzuni almashtirish" aria-label="Mavzuni almashtirish">
+              <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <h1 class="main-title">Uyga Vazifa: <span>Todo</span></h1>
+        <p class="subtitle">Barcha dars va topshiriqlaringizni qulay tartiblang</p>
+
+        <!-- Progress Bar & Summary -->
+        <div class="progress-section">
+          <div class="progress-meta">
+            <span class="progress-label">Bajarilish darajasi</span>
+            <span class="progress-percentage" id="progressPercentage">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+          </div>
+          <div class="stats-pills">
+            <div class="stat-item">
+              <span class="stat-dot dot-all"></span>
+              Jami: <strong id="totalCount">0</strong>
+            </div>
+            <div class="stat-item">
+              <span class="stat-dot dot-pending"></span>
+              Kutilmoqda: <strong id="pendingCount">0</strong>
+            </div>
+            <div class="stat-item">
+              <span class="stat-dot dot-completed"></span>
+              Bajarildi: <strong id="completedCount">0</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Search Box -->
+      <section class="search-box-wrap">
+        <div class="search-container">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Vazifalarni qidirish..." 
+            autocomplete="off"
+            aria-label="Vazifalarni qidirish"
+          >
+          <button id="clearSearchBtn" class="clear-search-btn" title="Qidiruvni tozalash" aria-label="Tozalash" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Add Task Input Form -->
+      <form class="add-task-form" id="addTaskForm">
+        <div class="input-with-button">
+          <input 
+            type="text" 
+            id="newTaskInput" 
+            placeholder="Yangi vazifa kiriting..." 
+            autocomplete="off"
+            required
+            aria-label="Yangi vazifa matni"
+          >
+          <button type="submit" id="addTaskBtn" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Qo'shish</span>
+          </button>
+        </div>
+        <div class="quick-tags" id="quickTags">
+          <span class="tag-title">Tezkor fanlar:</span>
+          <button type="button" class="chip" data-subject="Matematika">Matematika</button>
+          <button type="button" class="chip" data-subject="Ona tili">Ona tili</button>
+          <button type="button" class="chip" data-subject="Adabiyot">Adabiyot</button>
+          <button type="button" class="chip" data-subject="Fizika">Fizika</button>
+          <button type="button" class="chip" data-subject="Ingliz tili">Ingliz tili</button>
+        </div>
+      </form>
+
+      <!-- Filter Tabs -->
+      <nav class="filter-nav" aria-label="Vazifalar filtri">
+        <button class="filter-tab active" data-filter="all" id="filterAll">
+          <span>Barchasi</span>
+          <span class="tab-badge" id="tabBadgeAll">0</span>
+        </button>
+        <button class="filter-tab" data-filter="pending" id="filterPending">
+          <span>Bajarilmagan</span>
+          <span class="tab-badge" id="tabBadgePending">0</span>
+        </button>
+        <button class="filter-tab" data-filter="completed" id="filterCompleted">
+          <span>Bajarilgan</span>
+          <span class="tab-badge" id="tabBadgeCompleted">0</span>
+        </button>
+      </nav>
+
+      <!-- Task List Container -->
+      <div class="tasks-wrapper" id="tasksWrapper">
+        <ul class="task-list" id="taskList" aria-live="polite">
+          <!-- Dynamically populated tasks -->
+        </ul>
+
+        <!-- Empty state placeholder -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 class="empty-title">Vazifalar mavjud emas</h2>
+          <p class="empty-desc">Yangi vazifa qo'shing yoki qidiruv so'zini tekshiring.</p>
+        </div>
+      </div>
+
+      <!-- Card Footer -->
+      <footer class="card-footer">
+        <span class="footer-hint" id="footerHint">Belgilash uchun bosing</span>
+        <button id="clearCompletedBtn" class="btn-ghost" title="Bajarilgan vazifalarni tozalash">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Bajarilganlarni tozalash</span>
+        </button>
+      </footer>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
